@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Madina!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(135deg, #2b0813, #4a0e17);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background Floating Elements */
+        .bg-animations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .floating-element {
+            position: absolute;
+            bottom: -50px;
+            font-size: 20px;
+            animation: floatUp 6s infinite linear;
+            opacity: 0.6;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+
+        .page {
+            display: none;
+            width: 94%;
+            max-width: 420px;
+            background: rgba(25, 10, 15, 0.95);
+            padding: 22px;
+            border-radius: 25px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 105, 180, 0.4);
+            position: absolute;
+            max-height: 92vh;
+            overflow-y: auto;
+            z-index: 10;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* Progress Dots Header */
+        .tabs-header {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .tab-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ff69b4;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ff69b4;
+        }
+        .tab-dot.active-tab {
+            background: #ff4081;
+            color: #fff;
+        }
+
+        h2, h1 {
+            color: #ff69b4;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+        p {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #ddd;
+            margin-bottom: 12px;
+        }
+
+        input {
+            padding: 12px;
+            width: 85%;
+            border-radius: 25px;
+            border: 1px solid #ff4081;
+            outline: none;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(45deg, #e91e63, #ff4081);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            margin-top: 10px;
+        }
+
+        /* Hint Button */
+        .hint-btn {
+            background: rgba(255, 105, 180, 0.15);
+            border: 1px dashed #ff4081;
+            color: #ff69b4;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .hint-text {
+            display: none;
+            font-size: 12px;
+            color: #ffb6c1;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* Stylish Calendar */
+        .stylish-calendar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #ff4081;
+            border-radius: 18px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .cal-month {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff69b4;
+            margin-bottom: 8px;
+        }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            font-size: 12px;
+        }
+        .cal-day {
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.06);
+        }
+        .cal-day.highlight-date {
+            background: #ff4081;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 12px #ff4081;
+        }
+
+        /* Balloons Grid */
+        .balloons-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .balloon-card {
+            background: linear-gradient(135deg, rgba(255,105,180,0.2), rgba(255,20,147,0.3));
+            border: 1px solid #ff69b4;
+            padding: 15px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            color: #ffb6c1;
+            transition: 0.3s;
+        }
+        .balloon-card:hover {
+            transform: scale(1.04);
+        }
+
+        /* Envelope Box & Auto-Scrolling Message Box */
+        .envelope-wrapper {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: white;
+            padding: 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4);
+        }
+        .letter-display {
+            background: rgba(255, 255, 255, 0.95);
+            color: #222;
+            padding: 16px;
+            border-radius: 15px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 150px;
+            max-height: 220px;
+            overflow-y: auto;
+            border: 2px solid #ff4081;
+            white-space: pre-wrap;
+            scroll-behavior: smooth;
+        }
+
+        /* Photos Display */
+        .memory-img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            background: #000;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            border: 2px solid #ff4081;
+        }
+
+        /* Cake Section */
+        .birthday-cake-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed #ff4081;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 10px 0;
+        }
+        .cake-graphic {
+            font-size: 60px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: 0.3s;
+        }
+        .cake-graphic:hover {
+            transform: scale(1.05);
+        }
+        .cake-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff69b4;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .canvas-box {
+            width: 100%;
+            height: 180px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animations" id="bgAnimations"></div>
+
+    <!-- STEP 1: PASSWORD -->
+    <div class="page active" id="page-1">
+        <div class="tabs-header">
+            <div class="tab-dot active-tab">1</div>
+            <div class="tab-dot">2</div>
+            <div class="tab-dot">3</div>
+            <div class="tab-dot">4</div>
+            <div class="tab-dot">5</div>
+            <div class="tab-dot">6</div>
+            <div class="tab-dot">7</div>
+            <div class="tab-dot">8</div>
+        </div>
+        <h2>🔒 Enter Password</h2>
+        <p>Surprise kholne ke liye password darj karein</p>
+        
+        <div class="hint-btn" onclick="toggleHint()">💡 Show Hint</div>
+        <div class="hint-text" id="hint-box">Hint: Special date and time</div>
+
+        <input type="text" id="pass-input" placeholder="Password likhein...">
+        <br>
+        <button class="btn" onclick="checkPassword()">Unlock Surprise</button>
+        <p id="error-msg" style="color: #ff5252; margin-top: 10px; font-size: 12px; font-weight: bold;"></p>
+    </div>
+
+    <!-- STEP 2: STYLISH CALENDAR -->
+    <div class="page" id="page-2">
+        <div class="tabs-header">
+            <div class="tab-dot">1</div>
+            <div class="tab-dot active-tab">2</div>
+            <div class="tab-dot">3</div>
+            <div class="tab-dot">4</div>
+            <div class="tab-dot">5</div>
+            <div class="tab-dot">6</div>
+            <div class="tab-dot">7</div>
+            <div class="tab-dot">8</div>
+        </div>
+        <h2>Special Day 📅</h2>
+        <div class="stylish-calendar">
+            <div class="cal-month">October 2026</div>
+            <div class="cal-grid">
+                <div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div>
+                <div class="cal-day highlight-date">23</div>
+                <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div>
+            </div>
+        </div>
+        <p style="margin-top: 10px; color: #ffb6c1;">23 October - A very special date! ✨</p>
+        <button class="btn" onclick="nextPage(3)">Continue →</button>
+    </div>
+
+    <!-- STEP 3: BALLOONS WISHES -->
+    <div class="page" id="page-3">
+        <div class="tabs-header">
+            <div class="tab-dot">1</div>
+            <div class="tab-dot">2</div>
+            <div class="tab-dot active-tab">3</div>
+            <div class="tab-dot">4</div>
+            <div class="tab-dot">5</div>
+            <div class="tab-dot">6</div>
+            <div class="tab-dot">7</div>
+            <div class="tab-dot">8</div>
+        </div>
+        <h2>Pop The Balloons 🎈</h2>
+        <p>Tap each balloon to reveal wishes!</p>
+        <div class="balloons-container">
+            <div class="balloon-card" onclick="this.innerHTML='✨ Always stay blessed!'">🎈 Balloon 1</div>
+            <div class="balloon-card" onclick="this.innerHTML='💖 Keep Smiling Madina!'">🎈 Balloon 2</div>
+            <div class="balloon-card" onclick="this.innerHTML='🌸 Shine Bright Always!'">🎈 Balloon 3</div>
+            <div class="balloon-card" onclick="this.innerHTML='🎂 Best Friend Ever!'">🎈 Balloon 4</div>
+        </div>
+        <button class="btn" onclick="nextPage(4)">Continue →</button>
+    </div>
+
+    <!-- STEP 4: STYLISH LETTER BOX WITH AUTO SCROLL AND EMOJIS -->
+    <div class="page" id="page-4">
+        <div class="tabs-header">
+            <div class="tab-dot">1</div>
+            <div class="tab-dot">2</div>
+            <div class="tab-dot">3</div>
+            <div class="tab-dot active-tab">4</div>
+            <div class="tab-dot">5</div>
+            <div class="tab-dot">6</div>
+            <div class="tab-dot">7</div>
+            <div class="tab-dot">8</div>
+        </div>
+        <h2>A Special Letter 💌</h2>
+        
+        <div class="envelope-wrapper" onclick="startTypingLetter()">
+            ✉️ Open Secret Letter
+        </div>
+
+        <div class="letter-display" id="typed-letter">Envelope par click karein...</div>
+        <button class="btn" style="margin-top: 10px;" onclick="nextPage(5)">Continue →</button>
+    </div>
+
+    <!-- STEP 5: MEMORY PHOTO 1 -->
+    <div class="page" id="page-5">
+        <div class="tabs-header">
+            <div class="tab-dot">1</div>
+            <div class="tab-dot">2</div>
+            <div class="tab-dot">3</div>
+            <div class="tab-dot">4</div>
+            <div class="tab-dot active-tab">5</div>
+            <div class="tab-dot">6</div>
+            <div class="tab-dot">7</div>
+            <div class="tab-dot">8</div>
+        </div>
+        <h2>Our Memories ❤️</h2>
+        <img src="pic1.jpg" class="memory-img" alt="Memory 1">
+        <p>Our first wonderful memory together ✨</p>
+        <button class="btn" onclick="nextPage(6)">Continue →</button>
+    </div>
+
+    <!-- STEP 6: MEMORY PHOTO 2 -->
+    <div class="page" id="page-6">
+        <div class="tabs-header">
+            <div class="tab-dot">1</div>
+            <div class="tab-dot">2</div>
+            <div class="tab-dot">3</div>
+            <div class="tab-dot">4</div>
+            <div class="tab-dot">5</div>
+            <div class="tab-dot active-tab">6</div>
+            <div class="tab-dot">7</div>
+            <div class="tab-dot">8</div>
+        </div>
+        <h2>Our Memories ❤️</h2>
+        <img src="pic2.jpg" class="memory-img" alt="Memory 2">
+        <p>Endless smiles and beautiful moments together! 🌸</p>
+        <button class="btn" onclick="nextPage(7)">Continue →</button>
+    </div>
+
+    <!-- STEP 7: BIG CAKE WITH NAME & CANDLES -->
+    <div class="page" id="page-7">
+        <div class="tabs-header">
+            <div class="tab-dot">1</div>
+            <div class="tab-dot">2</div>
+            <div class="tab-dot">3</div>
+            <div class="tab-dot">4</div>
+            <div class="tab-dot">5</div>
+            <div class="tab-dot">6</div>
+            <div class="tab-dot active-tab">7</div>
+            <div class="tab-dot">8</div>
+        </div>
+        <h2>Happy Birthday! 🎂</h2>
+        <div class="birthday-cake-box">
+            <div class="cake-graphic" id="cake-icon" onclick="blowCandle()">🎂🕯️🕯️</div>
+            <div class="cake-name">MADINA</div>
+            <p id="cake-status" style="margin-top: 8px; font-size: 12px; color: #ffb6c1;">Tap cake to blow candles!</p>
+        </div>
+        <button class="btn" onclick="nextPage(8)">Continue →</button>
+    </div>
+
+    <!-- STEP 8: CONSTELLATION HEART -->
+    <div class="page" id="page-8">
+        <div class="tabs-header">
+            <div class="tab-dot">1</div>
+            <div class="tab-dot">2</div>
+            <div class="tab-dot">3</div>
+            <div class="tab-dot">4</div>
+            <div class="tab-dot">5</div>
+            <div class="tab-dot">6</div>
+            <div class="tab-dot">7</div>
+            <div class="tab-dot active-tab">8</div>
+        </div>
+        <h2>Constellation ✨</h2>
+        <div class="canvas-box">
+            <canvas id="heartCanvas" width="280" height="180"></canvas>
+        </div>
+        <p>Happy Birthday Madina! 💕</p>
+        <button class="btn" onclick="location.reload()">Replay 🔄</button>
+    </div>
+
+    <audio id="bg-song" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const symbols = ['💖', '🌸', '✨', '🎈', '💕'];
+        const bgContainer = document.getElementById('bgAnimations');
+        function createFloatingElement() {
+            const el = document.createElement('div');
+            el.classList.add('floating-element');
+            el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            bgContainer.appendChild(el);
+            setTimeout(() => el.remove(), 6000);
+        }
+        setInterval(createFloatingElement, 400);
+
+        function nextPage(pageNum) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageNum).classList.add('active');
+        }
+
+        function toggleHint() {
+            const box = document.getElementById('hint-box');
+            box.style.display = box.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkPassword() {
+            let inputVal = document.getElementById('pass-input').value.trim().toLowerCase();
+            let cleanInput = inputVal.replace(/\s+/g, ' ').replace(/-/g, '_');
+            
+            if (cleanInput.includes("6 january") && cleanInput.includes("04:00") && cleanInput.includes("04:35")) {
+                nextPage(2);
+                document.getElementById('bg-song').play().catch(e => console.log(e));
+            } else {
+                document.getElementById('error-msg').innerText = "Hahaha ghalat! Lagta hai neend mein ho, dobara try karo! 🤫";
+            }
+        }
+
+        // Automatic Typewriter with Auto-Scroll & Emojis
+        let isTyping = false;
+        function startTypingLetter() {
+            if (isTyping) return;
+            isTyping = true;
+            const text = "Dearest Madina,\n\nHappy, Happy Birthday to you! 🎉✨💖\n\n Aaj ka din tumhare liye kitna khaas hai 🌸, yeh batane ki zaroorat nahi kyunke tum khud bohot special ho 👑. Tumhari yeh pyari si smile hamesha aise hi barkarar rahe 😊 aur Allah tumhe duniya ki saari khushiyan, sehat aur kamyabiyan ata farmaye 🤲💫.\n\nThank you for being such an incredible best friend! 👭💕 Enjoy your day to the fullest! 🎂🥳🎁\n\nWith endless love & best wishes! 💕✨";
+            const container = document.getElementById('typed-letter');
+            container.innerHTML = "";
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    container.innerHTML += text.charAt(i);
+                    i++;
+                    container.scrollTop = container.scrollHeight; // Auto-scroll down as text grows
+                    setTimeout(typeWriter, 35);
+                }
+            }
+            typeWriter();
+        }
+
+        function blowCandle() {
+            document.getElementById('cake-icon').innerHTML = "🎂✨🎉";
+            document.getElementById('cake-status').innerText = "Yay! Wish granted successfully! 🎈";
+        }
+
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function getHeartPoint(t) {
+            let x = 16 * Math.pow(Math.sin(t), 3);
+            let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+            return { x: x * 4.5 + 140, y: y * 4.5 + 90 };
+        }
+        for (let i = 0; i < 240; i++) {
+            let t = Math.random() * Math.PI * 2;
+            let target = getHeartPoint(t);
+            particles.push({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                tx: target.x, ty: target.y, size: Math.random() * 2 + 1, color: '#ff4081'
+            });
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let p of particles) {
+                p.tx += (Math.random() - 0.5) * 0.4;
+                p.ty += (Math.random() - 0.5) * 0.4;
+                p.x += (p.tx - p.x) * 0.08;
+                p.y += (p.ty - p.y) * 0.08;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+  </html>
+              
